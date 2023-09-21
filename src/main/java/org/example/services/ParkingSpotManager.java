@@ -1,9 +1,8 @@
 package org.example.services;
-import org.example.parkingStrategy.VehicleParkingStrategy;
 import org.example.pojo.ParkingSpot;
 import org.example.pojo.Ticket;
 import org.example.pojo.Vehicle;
-
+import org.example.parkingStrategy.VehicleParkingStrategy;
 import java.util.*;
 
 public class ParkingSpotManager {
