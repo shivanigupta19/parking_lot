@@ -21,25 +21,28 @@ public class ParkingLot {
         parkingSpotManager.initializeParkingLot();
         VehicleParkingStrategy vehicleParkingStrategy = new NearestParkingStrategy();
         parkingSpotManager.setVehicleParkingStrategy(vehicleParkingStrategy);
-        parkingSpotManager.toString();
+//        parkingSpotManager.toString();
 
         outerloop:
         while(true) {
             String[] cmd = br.readLine().split(" ");
             switch (cmd[0]) {
                 case "create_parking_lot":
+                    if(parkingSpotManager.getParkingSpotList().size() == parkingSpotManager.getCapacity()) {
+                        System.out.println("Parking Lot is already created");
+                    }
                     break;
 
                 case "park_vehicle":
                     Vehicle vehicle = new Vehicle(cmd[1], cmd[2].toLowerCase(), VehicleType.Car);
 
                     parkingSpotManager.parkVehicle(vehicle);
-                    parkingSpotManager.toString();
+//                    parkingSpotManager.toString();
                     break;
 
                 case "unpark_vehicle":
                     parkingSpotManager.removeVehicle(cmd[1]);
-                    parkingSpotManager.toString();
+//                    parkingSpotManager.toString();
                     break;
 
                 case "display":

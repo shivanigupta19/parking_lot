@@ -191,4 +191,16 @@ public class ParkingSpotManager {
     public void setVehicleParkingStrategy(VehicleParkingStrategy vehicleParkingStrategy) {
         this.vehicleParkingStrategy = vehicleParkingStrategy;
     }
+
+    public List<ParkingSpot> getParkingSpotList() {
+        return parkingSpotList;
+    }
+
+    public HashMap<String, List<Vehicle>> getColorToVehiclesMapping() {
+        return colorToVehiclesMapping;
+    }
+
+    public HashMap<String, Vehicle> getRegistrationNoToVehicleMapping() {
+        return registrationNoToVehicleMapping;
+    }
 }
