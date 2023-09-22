@@ -91,7 +91,7 @@ public class ParkingSpotManager implements Parking {
                     + vehicle.getRegistrationNumber() +
                     ", color " + vehicle.getColor() +
                     " and ticker Id " + ticket.getTicketId() +
-                    " is parked");
+                    " is parked on " + ticket.getEntryTime());
         } catch (ParkingFullException parkingFullException) {
             throw new ParkingFullException(parkingFullException.getMessage());
         }
@@ -142,10 +142,11 @@ public class ParkingSpotManager implements Parking {
             return;
         }
 
+        System.out.println("The Registration No of Car which belongs to the color " + color + " are -");
+
         for (Vehicle vehicle : vehicleList) {
-            System.out.print(vehicle.getRegistrationNumber() + ", ");
+            System.out.println(vehicle.getRegistrationNumber());
         }
-        System.out.println();
     }
 
     public void getTicketIdMappedToRegistrationNo(String registrationNo) {
@@ -157,7 +158,7 @@ public class ParkingSpotManager implements Parking {
         }
 
         Ticket ticket = vehicle.getTicket();
-        System.out.println(ticket.getTicketId());
+        System.out.println("The Ticket Id of Car which has a Registration No " + registrationNo + " is " + ticket.getTicketId());
     }
 
     public void getTicketIdMappedToColor(String color) {
@@ -168,11 +169,12 @@ public class ParkingSpotManager implements Parking {
             return;
         }
 
+        System.out.println("The Ticket Ids of Car which has the color " + color + " are -");
+
         for (Vehicle vehicle : vehicleList) {
             Ticket ticket = vehicle.getTicket();
-            System.out.print(ticket.getTicketId() + ", ");
+            System.out.println(ticket.getTicketId());
         }
-        System.out.println();
     }
 
     public int getCapacity() {

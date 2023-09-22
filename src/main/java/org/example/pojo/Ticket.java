@@ -6,7 +6,6 @@ public class Ticket {
     private String ticketId;
     private String entryTime;
     private ParkingSpot parkingSpot;
-    // ParkingSpot
 
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 

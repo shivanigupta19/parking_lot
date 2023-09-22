@@ -53,11 +53,11 @@ public class ParkingLot {
                             parkingSpotManager.getRegistrationNoMappedToColor(cmd[2].toLowerCase());
                             break;
 
-                        case "ticketNo_mapped_to_regNo":
+                        case "ticketId_mapped_to_regNo":
                             parkingSpotManager.getTicketIdMappedToRegistrationNo(cmd[2]);
                             break;
 
-                        case "ticketNos_mapped_to_color":
+                        case "ticketIds_mapped_to_color":
                             parkingSpotManager.getTicketIdMappedToColor(cmd[2].toLowerCase());
                             break;
 
@@ -89,7 +89,7 @@ public class ParkingLot {
 // unpark_vehicle 657
 
 // display regNo_mapped_to_color gReen
-// display ticketNo_mapped_to_regNo 765
-// display ticketNos_mapped_to_color rEd
+// display ticketId_mapped_to_regNo 765
+// display ticketIds_mapped_to_color rEd
 
 // exit
