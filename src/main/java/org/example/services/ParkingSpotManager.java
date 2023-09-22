@@ -1,4 +1,5 @@
 package org.example.services;
+import org.example.errors.ParkingLotErrors;
 import org.example.exception.Parking;
 import org.example.exception.impl.InvalidVehicleNumberException;
 import org.example.exception.impl.ParkingFullException;
@@ -59,7 +60,7 @@ public class ParkingSpotManager implements Parking {
             ParkingSpot parkingSpot = vehicleParkingStrategy.getAvailableSpot(parkingSpotList, vehicle);
 
             if (Objects.isNull(parkingSpot)) {
-                throw new ParkingFullException("No Empty Parking Slot available");
+                throw new ParkingFullException(ParkingLotErrors.PARKING_FULL_ERROR);
             }
 
             Vehicle vehicleMappedToRegisteredNo = registrationNoToVehicleMapping.get(vehicle.getRegistrationNumber());
@@ -138,7 +139,7 @@ public class ParkingSpotManager implements Parking {
         List<Vehicle> vehicleList = colorToVehiclesMapping.get(color);
 
         if (vehicleList.isEmpty()) {
-            System.out.println("No Vehicle of this color is parked yet");
+            System.out.println(ParkingLotErrors.INVALID_VEHICLE);
             return;
         }
 
@@ -165,7 +166,7 @@ public class ParkingSpotManager implements Parking {
         List<Vehicle> vehicleList = colorToVehiclesMapping.get(color);
 
         if (vehicleList.isEmpty()) {
-            System.out.println("No Vehicle of this color is parked yet");
+            System.out.println(ParkingLotErrors.INVALID_VEHICLE);
             return;
         }
 
