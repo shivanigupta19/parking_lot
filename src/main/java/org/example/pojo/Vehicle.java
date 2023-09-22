@@ -45,6 +45,5 @@ public class Vehicle {
 
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
-        System.out.println("Parked vehicle. Ticket ID: " + ticket.getTicketId());
     }
 }

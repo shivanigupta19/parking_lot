@@ -1,6 +1,8 @@
 package org.example;
 
 import org.example.enums.VehicleType;
+import org.example.exception.impl.InvalidVehicleNumberException;
+import org.example.exception.impl.ParkingFullException;
 import org.example.parkingStrategy.impl.NearestParkingStrategy;
 import org.example.parkingStrategy.VehicleParkingStrategy;
 import org.example.pojo.Vehicle;
@@ -12,7 +14,7 @@ import java.io.InputStreamReader;
 
 public class ParkingLot {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ParkingFullException, InvalidVehicleNumberException {
         System.out.println("Welcome to Car parking lot !!");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 

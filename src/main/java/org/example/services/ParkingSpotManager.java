@@ -1,11 +1,14 @@
 package org.example.services;
+import org.example.exception.Parking;
+import org.example.exception.impl.InvalidVehicleNumberException;
+import org.example.exception.impl.ParkingFullException;
 import org.example.pojo.ParkingSpot;
 import org.example.pojo.Ticket;
 import org.example.pojo.Vehicle;
 import org.example.parkingStrategy.VehicleParkingStrategy;
 import java.util.*;
 
-public class ParkingSpotManager {
+public class ParkingSpotManager implements Parking {
     private int capacity = 10;
     List<ParkingSpot> parkingSpotList;
 
@@ -50,68 +53,85 @@ public class ParkingSpotManager {
         return ticket;
     }
 
-    public void parkVehicle(Vehicle vehicle) {
-        ParkingSpot parkingSpot = vehicleParkingStrategy.getAvailableSpot(parkingSpotList, vehicle);
+    @Override
+    public void parkVehicle(Vehicle vehicle) throws ParkingFullException {
+        try {
+            ParkingSpot parkingSpot = vehicleParkingStrategy.getAvailableSpot(parkingSpotList, vehicle);
 
-        if (Objects.isNull(parkingSpot)) {
-            System.out.println("Parking Spots are full, Please wait");
-            return;
+            if (Objects.isNull(parkingSpot)) {
+                throw new ParkingFullException("No Empty Parking Slot available");
+            }
+
+            Vehicle vehicleMappedToRegisteredNo = registrationNoToVehicleMapping.get(vehicle.getRegistrationNumber());
+
+            if (!Objects.isNull(vehicleMappedToRegisteredNo)) {
+                System.out.println("This " + vehicle.getVehicleType() + " having registration No. "
+                        + vehicle.getRegistrationNumber() + " and color " + vehicle.getColor() + " is already parked");
+                return;
+            }
+
+            List<Vehicle> vehicleList = colorToVehiclesMapping.get(vehicle.getColor());
+
+            if (Objects.isNull(vehicleList)) {
+                vehicleList = new ArrayList<>();
+            }
+            vehicleList.add(vehicle);
+            colorToVehiclesMapping.put(vehicle.getColor(), vehicleList);
+
+            registrationNoToVehicleMapping.put(vehicle.getRegistrationNumber(), vehicle);
+
+            // generate ticket
+            Ticket ticket = this.generateParkingTicket(parkingSpot, vehicle);
+            vehicle.setTicket(ticket);
+
+            // park the vehicle
+            parkingSpot.parkVehicle(vehicle);
+
+            System.out.println(vehicle.getVehicleType() + " having registration No. "
+                    + vehicle.getRegistrationNumber() +
+                    ", color " + vehicle.getColor() +
+                    " and ticker Id " + ticket.getTicketId() +
+                    " is parked");
+        } catch (ParkingFullException parkingFullException) {
+            throw new ParkingFullException(parkingFullException.getMessage());
         }
-
-        Vehicle vehicleMappedToRegisteredNo = registrationNoToVehicleMapping.get(vehicle.getRegistrationNumber());
-
-        if (!Objects.isNull(vehicleMappedToRegisteredNo)) {
-            System.out.println("This " + vehicle.getVehicleType() + " having registration No. "
-                    + vehicle.getRegistrationNumber() + " and color " + vehicle.getColor() + " is already parked");
-            return;
-        }
-
-        List<Vehicle> vehicleList = colorToVehiclesMapping.get(vehicle.getColor());
-
-        if (Objects.isNull(vehicleList)) {
-            vehicleList = new ArrayList<>();
-        }
-        vehicleList.add(vehicle);
-        colorToVehiclesMapping.put(vehicle.getColor(), vehicleList);
-
-        registrationNoToVehicleMapping.put(vehicle.getRegistrationNumber(), vehicle);
-
-        // generate ticket
-        Ticket ticket = this.generateParkingTicket(parkingSpot, vehicle);
-        vehicle.setTicket(ticket);
-
-        // park the vehicle
-        parkingSpot.parkVehicle(vehicle);
-
-        System.out.println(vehicle.getVehicleType() + " having registration No. "
-                + vehicle.getRegistrationNumber() + " and color " + vehicle.getColor() + " is parked");
     }
 
-    public void removeVehicle(String registrationNumber) {
-        Vehicle vehicle = registrationNoToVehicleMapping.get(registrationNumber);
 
-        if (Objects.isNull(vehicle)) {
-            System.out.println("This vehicle having registration no. " + registrationNumber + " is not parked or removed from parking");
-            return;
-        }
+    @Override
+    public void removeVehicle(String registrationNumber) throws InvalidVehicleNumberException {
+        try {
+            Vehicle vehicle = registrationNoToVehicleMapping.get(registrationNumber);
 
-        List<Vehicle> vehicleList = colorToVehiclesMapping.get(vehicle.getColor());
-
-        if (vehicleList.size() == 1) colorToVehiclesMapping.remove(vehicle.getColor());
-        else vehicleList.remove(vehicle);
-
-        registrationNoToVehicleMapping.remove(registrationNumber);
-        ParkingSpot parkingSpot = null;
-
-        for(ParkingSpot spot: parkingSpotList) {
-            if(spot.getVehicle() == vehicle) {
-                parkingSpot = spot;
+            if (Objects.isNull(vehicle)) {
+                throw new InvalidVehicleNumberException("This vehicle having registration no. " + registrationNumber + " is not parked or removed from parking");
             }
-        }
-        parkingSpot.removeVehicle();
 
-        System.out.println("The " + vehicle.getVehicleType() + " having registration No. "
-                + vehicle.getRegistrationNumber() + " and color " + vehicle.getColor() + " is removed from parking spot");
+            List<Vehicle> vehicleList = colorToVehiclesMapping.get(vehicle.getColor());
+
+            if (vehicleList.size() == 1) {
+                colorToVehiclesMapping.remove(vehicle.getColor());
+            } else {
+                vehicleList.remove(vehicle);
+            }
+
+            registrationNoToVehicleMapping.remove(registrationNumber);
+
+            ParkingSpot parkingSpot = parkingSpotList.stream()
+                    .filter(spot -> spot.getVehicle() == vehicle)
+                    .findFirst()
+                    .orElse(null);
+
+            if (parkingSpot != null) {
+                parkingSpot.removeVehicle();
+            }
+
+            System.out.println("The " + vehicle.getVehicleType() + " having registration No. "
+                    + vehicle.getRegistrationNumber() + " and color " + vehicle.getColor() + " is removed from parking spot");
+
+        } catch (InvalidVehicleNumberException invalidVehicleNumber) {
+            throw new InvalidVehicleNumberException(invalidVehicleNumber.getMessage());
+        }
     }
 
     public void getRegistrationNoMappedToColor(String color) {
