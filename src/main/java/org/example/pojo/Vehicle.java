@@ -12,7 +12,7 @@ public class Vehicle {
     public Vehicle(String registrationNumber, String color, VehicleType vehicleType) {
         this.registrationNumber = registrationNumber;
         this.vehicleType = vehicleType;
-        this.color = color;
+        this.color = color.toLowerCase();
     }
 
     public String getRegistrationNumber() {
@@ -36,7 +36,7 @@ public class Vehicle {
     }
 
     public void setColor(String color) {
-        this.color = color;
+        this.color = color.toLowerCase();
     }
 
     public void setVehicleType(VehicleType vehicleType) {
