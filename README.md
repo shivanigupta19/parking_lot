@@ -135,7 +135,7 @@ Stop taking input when you encounter the word exit
 <ul>Parking Spot created with capacity of <parking_lot_capacity></ul>
 
 <b>📍 park_vehicle </b><br>
-	<ul>Car having registration No. <registration_no>, color <color> and ticker Id <ticketId> is parked on <entry_time> at Parking Spot <parking_spot_id>
+	<ul>Car having registration No. <registration_no>, color <color> and ticker Id <ticketId> is parked on <entry_time> at Parking Spot <parking_spot_id></ul>
 
 <b>📍 unpark_vehicle </b><br>
 <ul>The Car having registration No. <registration_no> and color <color> is removed from parking spot <parking_spot_id></ul>
