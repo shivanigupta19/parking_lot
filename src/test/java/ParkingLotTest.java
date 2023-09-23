@@ -34,7 +34,7 @@ public class ParkingLotTest {
     @Test
     public void parkVehicleTest() {
         try{
-            Vehicle vehicle = new Vehicle("234", "red", VehicleType.Car);
+            Vehicle vehicle = new Vehicle("234", "rEd", VehicleType.Car);
             parkingSpotManager.parkVehicle(vehicle);
             String ticketId = "0_234";
 

@@ -92,7 +92,9 @@ public class ParkingSpotManager implements Parking {
                     + vehicle.getRegistrationNumber() +
                     ", color " + vehicle.getColor() +
                     " and ticker Id " + ticket.getTicketId() +
-                    " is parked on " + ticket.getEntryTime());
+                    " is parked on " + ticket.getEntryTime() +
+                    " at Parking Spot " + parkingSpotList.indexOf(vehicle.getTicket().getParkingSpot())
+            );
         } catch (ParkingFullException parkingFullException) {
             throw new ParkingFullException(parkingFullException.getMessage());
         }
@@ -123,23 +125,30 @@ public class ParkingSpotManager implements Parking {
                     .findFirst()
                     .orElse(null);
 
+            int parkingSpotId = parkingSpot.getParkingSpotId();
+
             if (parkingSpot != null) {
                 parkingSpot.removeVehicle();
             }
 
             System.out.println("The " + vehicle.getVehicleType() + " having registration No. "
-                    + vehicle.getRegistrationNumber() + " and color " + vehicle.getColor() + " is removed from parking spot");
+                    + vehicle.getRegistrationNumber() + " and color " + vehicle.getColor() + " is removed from parking spot " + parkingSpotId);
 
         } catch (InvalidVehicleNumberException invalidVehicleNumber) {
-            throw new InvalidVehicleNumberException(invalidVehicleNumber.getMessage());
+            System.out.println(invalidVehicleNumber.getMessage());
         }
     }
 
     public void getRegistrationNoMappedToColor(String color) {
+        if(colorToVehiclesMapping.isEmpty()) {
+            System.out.println(ParkingLotErrors.INVALID_VEHICLE_HAVING_COLOR);
+            return;
+        }
+
         List<Vehicle> vehicleList = colorToVehiclesMapping.get(color);
 
-        if (vehicleList.isEmpty()) {
-            System.out.println(ParkingLotErrors.INVALID_VEHICLE);
+        if (Objects.isNull(vehicleList)) {
+            System.out.println(ParkingLotErrors.INVALID_VEHICLE_HAVING_COLOR);
             return;
         }
 
@@ -151,10 +160,15 @@ public class ParkingSpotManager implements Parking {
     }
 
     public void getTicketIdMappedToRegistrationNo(String registrationNo) {
+        if(registrationNoToVehicleMapping.isEmpty()) {
+            System.out.println(ParkingLotErrors.INVALID_VEHICLE_HAVING_REG_NO);
+            return;
+        }
+
         Vehicle vehicle = registrationNoToVehicleMapping.get(registrationNo);
 
         if (Objects.isNull(vehicle)) {
-            System.out.println("No Vehicle having registration no " + registrationNo + " is parked yet");
+            System.out.println(ParkingLotErrors.INVALID_VEHICLE_HAVING_REG_NO);
             return;
         }
 
@@ -163,10 +177,15 @@ public class ParkingSpotManager implements Parking {
     }
 
     public void getTicketIdMappedToColor(String color) {
+        if(colorToVehiclesMapping.isEmpty()) {
+            System.out.println(ParkingLotErrors.INVALID_VEHICLE_HAVING_COLOR);
+            return;
+        }
+
         List<Vehicle> vehicleList = colorToVehiclesMapping.get(color);
 
-        if (vehicleList.isEmpty()) {
-            System.out.println(ParkingLotErrors.INVALID_VEHICLE);
+        if (Objects.isNull(vehicleList)) {
+            System.out.println(ParkingLotErrors.INVALID_VEHICLE_HAVING_COLOR);
             return;
         }
 
@@ -180,31 +199,6 @@ public class ParkingSpotManager implements Parking {
 
     public int getCapacity() {
         return capacity;
-    }
-
-    @Override
-    public String toString() {
-        for (ParkingSpot parkingSpot : parkingSpotList) {
-            System.out.println(parkingSpot.getParkingSpotId() + ", " + parkingSpot.getVehicle() + ", " + parkingSpot.getEmpty());
-        }
-        System.out.println(" ------------------------------------------------ parkingSpotList ");
-
-
-        for (Map.Entry<String, List<Vehicle>> set : colorToVehiclesMapping.entrySet()) {
-            List<Vehicle> vehicleList = set.getValue();
-            for (Vehicle vehicle : vehicleList) {
-                System.out.println(set.getKey() + " => " + vehicle.getRegistrationNumber() + ", " + vehicle.getColor());
-            }
-        }
-        System.out.println(" ------------------------------------------------ colorToVehicleMapping");
-
-        for (Map.Entry<String, Vehicle> set : registrationNoToVehicleMapping.entrySet()) {
-            Vehicle vehicle = set.getValue();
-            System.out.println(set.getKey() + " => " + vehicle.getRegistrationNumber() + ", " + vehicle.getColor());
-        }
-        System.out.println(" ------------------------------------------------ registrationNoToVehicleMapping");
-
-        return "";
     }
 
     public VehicleParkingStrategy getVehicleParkingStrategy() {

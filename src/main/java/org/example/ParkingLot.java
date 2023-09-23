@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.constants.ParkingLotConstant;
 import org.example.enums.VehicleType;
 import org.example.exception.impl.InvalidVehicleNumberException;
 import org.example.exception.impl.ParkingFullException;
@@ -15,61 +16,61 @@ import java.io.InputStreamReader;
 public class ParkingLot {
 
     public static void main(String[] args) throws IOException, ParkingFullException, InvalidVehicleNumberException {
-        System.out.println("Welcome to Car parking lot !!");
+        System.out.println(ParkingLotConstant.WELCOME_PARKING_LOT);
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String[] str = br.readLine().split(" ");
-        ParkingSpotManager parkingSpotManager = new ParkingSpotManager(Integer.parseInt(str[1]));
-        parkingSpotManager.initializeParkingLot();
-        VehicleParkingStrategy vehicleParkingStrategy = new NearestParkingStrategy();
-        parkingSpotManager.setVehicleParkingStrategy(vehicleParkingStrategy);
-//        parkingSpotManager.toString();
 
-        outerloop:
-        while(true) {
-            String[] cmd = br.readLine().split(" ");
-            switch (cmd[0]) {
-                case "create_parking_lot":
-                    if(parkingSpotManager.getParkingSpotList().size() == parkingSpotManager.getCapacity()) {
-                        System.out.println("Parking Lot is already created");
-                    }
-                    break;
+        if (str[0].equals("create_parking_lot")) {
+            ParkingSpotManager parkingSpotManager = new ParkingSpotManager(Integer.parseInt(str[1]));
+            parkingSpotManager.initializeParkingLot();
+            VehicleParkingStrategy vehicleParkingStrategy = new NearestParkingStrategy();
+            parkingSpotManager.setVehicleParkingStrategy(vehicleParkingStrategy);
 
-                case "park_vehicle":
-                    Vehicle vehicle = new Vehicle(cmd[1], cmd[2].toLowerCase(), VehicleType.Car);
+            outerloop:
+            while (true) {
+                String[] cmd = br.readLine().split(" ");
+                switch (cmd[0]) {
+                    case "create_parking_lot":
+                        if (parkingSpotManager.getParkingSpotList().size() == parkingSpotManager.getCapacity()) {
+                            System.out.println(ParkingLotConstant.PARKING_LOT_CREATED);
+                        }
+                        break;
 
-                    parkingSpotManager.parkVehicle(vehicle);
-//                    parkingSpotManager.toString();
-                    break;
+                    case "park_vehicle":
+                        Vehicle vehicle = new Vehicle(cmd[1], cmd[2].toLowerCase(), VehicleType.Car);
 
-                case "unpark_vehicle":
-                    parkingSpotManager.removeVehicle(cmd[1]);
-//                    parkingSpotManager.toString();
-                    break;
+                        parkingSpotManager.parkVehicle(vehicle);
+                        break;
 
-                case "display":
-                    switch (cmd[1]) {
-                        case "regNo_mapped_to_color":
-                            parkingSpotManager.getRegistrationNoMappedToColor(cmd[2].toLowerCase());
-                            break;
+                    case "unpark_vehicle":
+                        parkingSpotManager.removeVehicle(cmd[1]);
+                        break;
 
-                        case "ticketId_mapped_to_regNo":
-                            parkingSpotManager.getTicketIdMappedToRegistrationNo(cmd[2]);
-                            break;
+                    case "display":
+                        switch (cmd[1]) {
+                            case "regNo_mapped_to_color":
+                                parkingSpotManager.getRegistrationNoMappedToColor(cmd[2].toLowerCase());
+                                break;
 
-                        case "ticketIds_mapped_to_color":
-                            parkingSpotManager.getTicketIdMappedToColor(cmd[2].toLowerCase());
-                            break;
+                            case "ticketId_mapped_to_regNo":
+                                parkingSpotManager.getTicketIdMappedToRegistrationNo(cmd[2]);
+                                break;
 
-                        default:
-                            System.out.println("Invalid case of display");
-                    }
-                    break;
+                            case "ticketIds_mapped_to_color":
+                                parkingSpotManager.getTicketIdMappedToColor(cmd[2].toLowerCase());
+                                break;
 
-                case "exit":
-                    break outerloop;
+                            default:
+                                System.out.println(ParkingLotConstant.INVALID_DISPLAY);
+                        }
+                        break;
+
+                    case "exit":
+                        break outerloop;
+                }
             }
-        }
+        } else System.out.println(ParkingLotConstant.CREATE_A_PARKING_LOT);
     }
 }
 
