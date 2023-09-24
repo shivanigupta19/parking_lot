@@ -166,17 +166,16 @@ The Above will be printed for each Registration No
 
 <h4>create_parking_lot 10</h4>
 
-
-park_vehicle 657 RED
-park_vehicle 897 Yellow
-park_vehicle 432 blue
-park_vehicle 123 greEn
-park_vehicle 876 reD
-park_vehicle 908 yelLoW
-park_vehicle 543 bLuE
-park_vehicle 231 gReeN
-park_vehicle 765 rEd
-park_vehicle 549 yEllOw
+<h4>park_vehicle 657 RED</h4>
+<h4>park_vehicle 897 Yellow</h4>
+<h4>park_vehicle 432 blue</h4>
+<h4>park_vehicle 123 greEn</h4>
+<h4>park_vehicle 876 reD</h4>
+<h4>park_vehicle 908 yelLoW</h4>
+<h4>park_vehicle 543 bLuE</h4>
+<h4>park_vehicle 231 gReeN</h4>
+<h4>park_vehicle 765 rEd</h4>
+<h4>park_vehicle 549 yEllOw</h4>
 
 <br>
 
@@ -184,9 +183,9 @@ park_vehicle 549 yEllOw
 
 <br>
 
-display regNo_mapped_to_color gReen
-display ticketId_mapped_to_regNo 765
-display ticketIds_mapped_to_color rEd
+<h4>display regNo_mapped_to_color gReen</h4>
+<h4>display ticketId_mapped_to_regNo 765</h4>
+<h4>display ticketIds_mapped_to_color rEd</h4>
 
 <br>
 
